@@ -139,30 +139,21 @@ void evt_proc(struct epoll_event *trig_event)
 
 int readAll(int fd)
 {
-	int read_count = 0, result = 0;
-	char recvMsg[1024] = { 0 };
+	int result = 0;
 	printf("recv msg:\n");
-	/* You need to continuously read/write a file descriptor untilEAGAIN when using the EPOLLET flag */
-	do
+	uint64_t msg;
+	result = read(fd, &msg,sizeof(uint64_t));
+	if(result < 0)
 	{
-		result = recv(fd, &recvMsg,sizeof(recvMsg) - 1, 0);
-		if(result < 0)
-		{
-			if(errno != EAGAIN)
-			{
-				perror("read fd error!\n");
-			}
-		}
-		else
-		{
-			read_count += result;
-			recvMsg[result] = '\0';
-			printf("%s",recvMsg);
-		}
-	}while(result > 0);
+		perror("read fd error!\n");
+	}
+	else
+	{
+		printf("%d",msg);
+	}
 	printf("\n");
 
-	return read_count;
+	return result;
 }
 
 void *trig_thread(void *arg)
@@ -182,3 +173,4 @@ void *trig_thread(void *arg)
 	
 	return nullptr;
 }
+

@@ -284,7 +284,7 @@ int readAll(int fd)
 	/* You need to continuously read/write a file descriptor untilEAGAIN when using the EPOLLET flag */
 	do
 	{
-		result = recv(fd, &recvMsg,sizeof(recvMsg) - 1, 0);
+		result = recv(fd, &recvMsg, sizeof(recvMsg)-1, 0);
 		if(result < 0)
 		{
 			if(errno != EAGAIN)
